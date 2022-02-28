@@ -30,46 +30,8 @@ void imprime(char *opcao) {
     
 }
 
-int checa_matricula(char *titulo_operacao, char *mensagem) {
-    char matricula[7];
-    bool erro = false;
-    while(true) {
-        system("@cls||clear");\
-        
-        if(erro) {
-            printf("-------------------------------------------------\n");
-            printf(titulo_operacao);
-            printf("\n-------------------------------------------------\n");
-            printf("     >>>> Numero de matricula invalido <<<<\n");
-            printf("-------------------------------------------------\n");
-        }
-        else{
-            printf("-------------------------------------------------\n");
-            printf(titulo_operacao);
-            printf("\n-------------------------------------------------\n");
-        }
-        printf("OBS.: O numero de matricula deve conter 6 digitos\n");
-        printf("-------------------------------------------------\n");
-        printf(mensagem);
-        scanf("%s", matricula);
-
-        erro = false;
-        if(matricula[6] == '\0') {
-            for(int i = 0; i < 6; i++) {
-                if( (matricula[i] - '0') > 9) {
-                    erro = true;
-                    break;
-                }
-            }
-        }
-        else {
-            erro = true;
-        }
-        if(!erro) {
-            break;
-        }
-    }
-    return atoi(matricula);
+bool valida_matricula(char *matricula) { // IMPLEMENTAR
+    return;
 }
 
 float valida_nota(char *nota) {
@@ -116,9 +78,39 @@ float valida_nota(char *nota) {
 struct aluno cadastro_aluno() {
     struct aluno dados_aluno;
 
-    dados_aluno.matricula = checa_matricula("                CADASTRO DE ALUNO", "Insira a matricula: ");
-
+    char matricula[7];
     bool e_valido = true;
+    while(true) {
+        system("@cls||clear");
+
+        imprime("cadastro");
+        if(!e_valido) {
+            printf("     >>>> Numero de matricula invalido <<<<\n");
+            printf("-------------------------------------------------\n");
+        }
+        e_valido = true;
+        printf("Insira a matricula: ");
+        scanf("%s", matricula);
+
+        
+        for(int i = 0; i < strlen(matricula); i++) {
+            if(matricula[i] == '\0') {
+                break;
+            }
+            if( (matricula[i] - '0') < 0 || (matricula[i] - '0') > 9) {
+                e_valido = false;
+                break;
+            }
+        }
+
+        if(e_valido) {
+            dados_aluno.matricula = atoi(matricula);
+            break;
+        }
+        
+    }
+
+    e_valido = true;
     char palavra[3][21] = {"primeira nota", "segunda nota", "quantidade de faltas"};
     int ordem = 0;
     while(true) {
@@ -179,8 +171,7 @@ int main()
     char opcao[2] = {'f', '\0'};
     
     int quant_registros = 1;
-    struct aluno *dados_aluno = malloc(sizeof(struct aluno) * quant_registros);
-    //struct aluno dados_aluno[quant_registros];
+    struct aluno *dados_aluno = malloc(sizeof(struct aluno));
     for(int i = 0; i < quant_registros; i++) {
         dados_aluno[i].matricula = -1;
         dados_aluno[i].nota1 = -1;
@@ -208,6 +199,7 @@ int main()
         // EXECUCAO DAS OPERACOES
 
         if(opcao[0] == '1') { // REGISTRO DE ALUNO 
+
             int posicao = -1;
             for(int i = 0; i < quant_registros; i++) { 
                 if(dados_aluno[i].matricula == -1) {
@@ -253,7 +245,7 @@ int main()
                 }
             }
         }
-        else if(opcao[0] == '3') { // LISTA ALUNOS (INCOMPLETO)
+        else if(opcao[0] == '3') { // LISTA ALUNOS (FORMATAR)
             system("@cls||clear");
 
             for(int i = 0; i < quant_registros; i++) {
@@ -266,13 +258,11 @@ int main()
                 if(i == (quant_registros - 1) && dados_aluno[i].matricula == -1) {
                     printf("Nenhum aluno registrado!\n");
                     printf("  \n");
-
-                    printf("Pressione Enter Para Continuar. . . ");
-                    getchar();
-                    getchar();
-
                 }
             }
+            printf("\nPressione Enter Para Continuar. . . ");
+                    getchar();
+                    getchar();
         }
         else if(opcao[0] == '4') { // ENCERRA O PROGRAMA
             system("@cls||clear");
