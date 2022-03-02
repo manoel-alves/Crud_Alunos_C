@@ -3,12 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-struct aluno { //struct global
-        int matricula;
-        float nota1;
-        float nota2;
-        int qnt_faltas; 
-};
+
 
 void imprime(char *opcao) {
 
@@ -40,10 +35,10 @@ void imprime(char *opcao) {
 }
 
 bool valida_matricula(char *matricula) { // IMPLEMENTAR
-    return;
+    return true;
 }
 
-float valida_nota(char *nota) {
+bool valida_nota(char *nota) {
     bool e_valido = true;
     bool ponto_flutuante = false;
     for(int i = 0; i < strlen(nota); i++) {
@@ -84,101 +79,16 @@ float valida_nota(char *nota) {
     return e_valido;
 }
 
-struct aluno cadastro_aluno() {
-    struct aluno dados_aluno;
-
-    char matricula[7];
-    bool e_valido = true;
-    while(true) {
-        system("@cls||clear");
-
-        imprime("cadastro");
-        if(!e_valido) {
-            printf("     >>>> Numero de matricula invalido <<<<\n");
-            printf("-------------------------------------------------\n");
-        }
-        e_valido = true;
-        printf("Insira a matricula: ");
-        scanf("%s", matricula);
-
-        
-        for(int i = 0; i < strlen(matricula); i++) {
-            if(matricula[i] == '\0') {
-                break;
-            }
-            if( (matricula[i] - '0') < 0 || (matricula[i] - '0') > 9) {
-                e_valido = false;
-                break;
-            }
-        }
-
-        if(e_valido) { //ADICIONAR CHECAGEM DOS DEMAIS NUMEROS DE MATRICULA <<<<<<<------------
-            dados_aluno.matricula = atoi(matricula);
-            break;
-        }
-        
-    }
-
-    e_valido = true;
-    char palavra[3][21] = {"primeira nota", "segunda nota", "quantidade de faltas"};
-    int ordem = 0;
-    while(true) {
-        system("@cls||clear");
-
-        imprime("cadastro");
-        if(!e_valido) {
-            printf("%s invalida\n", palavra[ordem]);
-        }
-        e_valido = true;
-        
-        
-        printf("Insira a %s do aluno: ", palavra[ordem]);
-
-        if(ordem == 0 || ordem == 1) {
-            char nota[6];
-            scanf("%s", nota);
-
-            e_valido = valida_nota(nota);
-
-            if(e_valido) {
-                if(ordem == 0) {
-                    dados_aluno.nota1 = atof(nota);
-                    ordem++;
-                }
-                else {
-                    dados_aluno.nota2 = atof(nota);
-                    ordem++;
-                }
-            }
-        }
-        else {
-            char qnt_faltas[3];
-            scanf("%s", qnt_faltas);
-            
-            for(int i = 0; i < strlen(qnt_faltas); i++) {
-                if(qnt_faltas[i] == '\0') {
-                    break;
-                }
-                if( (qnt_faltas[i] - '0') < 0 || (qnt_faltas[i] - '0') > 9) {
-                    e_valido = false;
-                }
-            }
-
-            if(e_valido) {
-                dados_aluno.qnt_faltas = atoi(qnt_faltas);
-                break;
-            }
-        }
-
-    }
-    
-    return dados_aluno;
-}
-
 int main() {
     char opcao[2] = {'f', '\0'};
     
     int quant_registros = 1;
+    struct aluno { 
+        int matricula;
+        float nota1;
+        float nota2;
+        int qnt_faltas; 
+    };
     struct aluno *dados_aluno = malloc(sizeof(struct aluno));
     for(int i = 0; i < quant_registros; i++) {
         dados_aluno[i].matricula = -1;
@@ -188,7 +98,6 @@ int main() {
     }
 
     while(true) {
-        //getchar();
         system("@cls||clear");
 
         imprime("menu");
@@ -206,7 +115,6 @@ int main() {
 
         // EXECUCAO DAS OPERACOES
         if(opcao[0] == '1') { // REGISTRO DE ALUNO 
-
             int posicao = -1;
             for(int i = 0; i < quant_registros; i++) { 
                 if(dados_aluno[i].matricula == -1) {
@@ -223,7 +131,97 @@ int main() {
                 }
             }
 
-            dados_aluno[posicao] = cadastro_aluno();
+            char matricula_prov[7];
+            bool e_valido = true;
+            while(true) {
+                system("@cls||clear");
+
+                imprime("cadastro");
+                if(!e_valido) {
+                    printf("     >>>> Numero de matricula invalido <<<<\n");
+                    printf("-------------------------------------------------\n");
+                }
+                e_valido = true;
+                printf("Insira a matricula: ");
+                scanf("%s", matricula_prov);
+
+                for(int i = 0; i < strlen(matricula_prov); i++) {
+                    if(matricula_prov[i] == '\0') {
+                        break;
+                    }
+                    if( (matricula_prov[i] - '0') < 0 || (matricula_prov[i] - '0') > 9) {
+                        e_valido = false;
+                        break;
+                    }
+                }
+
+                if(e_valido) {
+                    for(int i = 0; i < quant_registros; i++) {
+                        if(dados_aluno[i].matricula == atoi(matricula_prov)) {
+                            e_valido = false;
+                            break;
+                        }
+                    }
+                    if(e_valido) {
+                        dados_aluno[posicao].matricula = atoi(matricula_prov);
+                        break;
+                    }                    
+                }
+                
+            }
+
+            e_valido = true;
+            char palavra[3][21] = {"primeira nota", "segunda nota", "quantidade de faltas"};
+            int ordem = 0;
+            while(true) {
+                system("@cls||clear");
+
+                imprime("cadastro");
+                if(!e_valido) {
+                    printf("%s invalida\n", palavra[ordem]);
+                }
+                e_valido = true;
+                
+                
+                printf("Insira a %s do aluno: ", palavra[ordem]);
+
+                if(ordem == 0 || ordem == 1) {
+                    char nota[6];
+                    scanf("%s", nota);
+
+                    e_valido = valida_nota(nota);
+
+                    if(e_valido) {
+                        if(ordem == 0) {
+                            dados_aluno[posicao].nota1 = atof(nota);
+                            ordem++;
+                        }
+                        else {
+                            dados_aluno[posicao].nota2 = atof(nota);
+                            ordem++;
+                        }
+                    }
+                }
+                else {
+                    char qnt_faltas[3];
+                    scanf("%s", qnt_faltas);
+                    
+                    for(int i = 0; i < strlen(qnt_faltas); i++) {
+                        if(qnt_faltas[i] == '\0') {
+                            break;
+                        }
+                        if( (qnt_faltas[i] - '0') < 0 || (qnt_faltas[i] - '0') > 9) {
+                            e_valido = false;
+                        }
+                    }
+
+                    if(e_valido) {
+                        dados_aluno[posicao].qnt_faltas = atoi(qnt_faltas);
+                        break;
+                    }
+                }
+
+            }
 
             system("@cls||clear");
 
@@ -287,18 +285,18 @@ int main() {
                                 e_valido = false;
                             } 
                         }
-                    }
-                    if(e_valido) {
-                        system("@cls||clear");
+                        if(e_valido) {
+                            system("@cls||clear");
 
-                        imprime("apagar");
-                        printf("     >>>> Aluno Apagado com Sucesso <<<<\n");
-                        printf("-------------------------------------------------\n");
+                            imprime("apagar");
+                            printf("     >>>> Aluno Apagado com Sucesso <<<<\n");
+                            printf("-------------------------------------------------\n");
 
-                        printf("\nPressione Enter Para Continuar. . . ");
-                        getchar();
-                        getchar();
-                        break;
+                            printf("\nPressione Enter Para Continuar. . . ");
+                            getchar();
+                            getchar();
+                            break;
+                        }
                     }
                     
                 }
