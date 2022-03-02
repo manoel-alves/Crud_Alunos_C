@@ -27,7 +27,16 @@ void imprime(char *opcao) {
         printf("                CADASTRO DE ALUNO\n");
         printf("-------------------------------------------------\n");
     }
-    
+    if(opcao == "apagar") {
+        printf("-------------------------------------------------\n");
+        printf("                  APAGAR ALUNO\n");
+        printf("-------------------------------------------------\n");
+    }   
+    if(opcao == "listar") {
+        printf("-------------------------------------------------\n");
+        printf("                LISTA DE ALUNOS\n");
+        printf("-------------------------------------------------\n");
+    }
 }
 
 bool valida_matricula(char *matricula) { // IMPLEMENTAR
@@ -103,7 +112,7 @@ struct aluno cadastro_aluno() {
             }
         }
 
-        if(e_valido) {
+        if(e_valido) { //ADICIONAR CHECAGEM DOS DEMAIS NUMEROS DE MATRICULA <<<<<<<------------
             dados_aluno.matricula = atoi(matricula);
             break;
         }
@@ -197,7 +206,6 @@ int main()
         }
 
         // EXECUCAO DAS OPERACOES
-
         if(opcao[0] == '1') { // REGISTRO DE ALUNO 
 
             int posicao = -1;
@@ -235,18 +243,85 @@ int main()
     
         }
         else if(opcao[0] == '2') { // DELETA ALUNO (INCOMPLETO)
-            int matricula_deletar = checa_matricula("                  APAGAR ALUNO", "Insira a matricula que deseja deletar: ");
+            int matricula = -1;
+            bool tem_registro = false;
             for(int i = 0; i < quant_registros; i++) {
-                if(dados_aluno[i].matricula == matricula_deletar) {
-                    dados_aluno[i].matricula = -1;
-                    dados_aluno[i].nota1 = -1;
-                    dados_aluno[i].nota2 = -1;
-                    dados_aluno[i].qnt_faltas = -1;
+                if(dados_aluno[i].matricula != -1) {
+                    tem_registro = true;
                 }
+            }
+
+            if(tem_registro) {
+                char matricula_prov[7];
+                bool e_valido = true;
+                while(true) {
+                    system("@cls||clear");
+
+                    imprime("apagar");
+                    if(!e_valido) {
+                        printf("     >>>> Numero de matricula invalido <<<<\n");
+                        printf("-------------------------------------------------\n");
+                    }
+                    e_valido = true;
+
+                    printf("Insira a matricula: ");
+                    scanf("%s", matricula_prov);
+
+                    for(int i = 0; i < strlen(matricula_prov); i++) {
+                        if(matricula_prov[i] == '\0') {
+                            break;
+                        }
+                        if( (matricula_prov[i] - '0') < 0 || (matricula_prov[i] - '0') > 9) {
+                            e_valido = false;
+                            break;
+                        }
+                    }
+
+                    if(e_valido) {
+                        for(int i = 0; i < quant_registros; i++) {
+                            if(dados_aluno[i].matricula == atoi(matricula_prov)) {
+                                dados_aluno[i].matricula = -1;
+                                dados_aluno[i].nota1 = -1;
+                                dados_aluno[i].nota2 = -1;
+                                dados_aluno[i].qnt_faltas = -1;
+                                break;
+                            }
+                            if(i == (quant_registros - 1) && dados_aluno[i].matricula != atoi(matricula_prov)) {
+                                e_valido = false;
+                            } 
+                        }
+                    }
+                    if(e_valido) {
+                        system("@cls||clear");
+
+                        imprime("apagar");
+                        printf("     >>>> Aluno Apagado com Sucesso <<<<\n");
+                        printf("-------------------------------------------------\n");
+
+                        printf("\nPressione Enter Para Continuar. . . ");
+                        getchar();
+                        getchar();
+                        break;
+                    }
+                    
+                }
+            }
+            else {
+                system("@cls||clear");
+
+                imprime("apagar");
+                printf("         >>> Nenhum aluno registrado! <<<\n");
+                printf("-------------------------------------------------\n");
+                
+                printf("\nPressione Enter Para Continuar. . . ");
+                getchar();
+                getchar();
             }
         }
         else if(opcao[0] == '3') { // LISTA ALUNOS (FORMATAR)
             system("@cls||clear");
+
+            imprime("listar");
 
             for(int i = 0; i < quant_registros; i++) {
                 if(dados_aluno[i].matricula != -1) {
