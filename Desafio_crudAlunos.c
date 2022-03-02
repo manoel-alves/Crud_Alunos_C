@@ -175,8 +175,7 @@ struct aluno cadastro_aluno() {
     return dados_aluno;
 }
 
-int main()
-{
+int main() {
     char opcao[2] = {'f', '\0'};
     
     int quant_registros = 1;
@@ -231,8 +230,6 @@ int main()
             imprime("cadastro");
             printf("     >>> Dados registrados com sucesso! <<<\n");
             printf("-------------------------------------------------\n");
-
-
             printf("|    Resumo do aluno:    |\n--------------------------\n");
             printf("| Matricula: %d\n| Nota 1: %.1f\n| Nota 2: %.1f\n| Quantidade de faltas: %d\n", dados_aluno[posicao].matricula, dados_aluno[posicao].nota1, dados_aluno[posicao].nota2, dados_aluno[posicao].qnt_faltas);
             printf("--------------------------\n");
