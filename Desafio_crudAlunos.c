@@ -258,7 +258,7 @@ int main() {
             pausa_programa();
     
         }
-        else if(opcao[0] == '2') { // DELETA ALUNO (INCOMPLETO)
+        else if(opcao[0] == '2') { // DELETA ALUNO
             int matricula = -1;
             bool tem_registro = false;
             for(int i = 0; i < quant_registros; i++) {
@@ -317,7 +317,7 @@ int main() {
                 pausa_programa();
             }
         }
-        else if(opcao[0] == '3') { // LISTA ALUNOS (FORMATAR)
+        else if(opcao[0] == '3') { // LISTA ALUNOS
             system("@cls||clear");
 
             imprime("listar");
