@@ -337,7 +337,7 @@ int main() {
                     printf("--------------------------\n");
 
                 }
-                if(i == (quant_registros - 1) && dados_aluno[i].matricula == -1) {
+                if(i == (quant_registros - 1) && dados_aluno[i].matricula == -1 && !imprimiu) {
                     printf("        >>> Nenhum aluno registrado! <<<\n");
                     printf("------------------------------------------------\n");
                 }
