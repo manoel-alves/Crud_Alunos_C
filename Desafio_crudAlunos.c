@@ -10,115 +10,10 @@ struct aluno {
     int qnt_faltas; 
 };
 
-void imprime(char *opcao) {
-    if(opcao == "menu") {
-        printf("----------------------\n");
-        printf("|        MENU        |\n");
-        printf("----------------------\n");
-        printf("|1 - Cadastrar Aluno |\n");
-        printf("|2 - Apagar Aluno    |\n");
-        printf("|3 - Listar Alunos   |\n");
-        printf("|4 - Sair            |\n");
-        printf("----------------------\n");
-    }
-    if(opcao == "cadastro") {
-        printf("-------------------------------------------------\n");
-        printf("                CADASTRO DE ALUNO\n");
-        printf("-------------------------------------------------\n");
-    }
-    if(opcao == "apagar") {
-        printf("-------------------------------------------------\n");
-        printf("                  APAGAR ALUNO\n");
-        printf("-------------------------------------------------\n");
-    }   
-    if(opcao == "listar") {
-        printf("-------------------------------------------------\n");
-        printf("                LISTA DE ALUNOS\n");
-        printf("-------------------------------------------------\n");
-    }
-}
-
-void pausa_programa() {
-    printf("\nPressione Enter Para Continuar. . . ");
-    getchar();
-    getchar();
-}
-
-bool valida_matricula(char *matricula, char *operacao, struct aluno *vetor_alunos, int quant_registros) {
-    bool e_valido = true;
-    for(int i = 0; i < strlen(matricula); i++) {
-        if(matricula[i] == '\0') {
-            break;
-        }
-        if( (matricula[i] - '0') < 0 || (matricula[i] - '0') > 9) {
-            e_valido = false;
-        }
-    }
-    
-    if(quant_registros != 0) {
-        for(int i = 0; i < quant_registros; i++) {
-            if(vetor_alunos[i].matricula == atoi(matricula)) {
-                if(operacao == "cadastro") {
-                    e_valido = false;
-                    break;
-                }
-                else if(operacao == "apagar") {
-                    e_valido = true;
-                    break;
-                }
-            }
-            else {
-                if(i == (quant_registros - 1) && operacao == "apagar") {
-                    e_valido = false;
-                    break;
-                }
-            }
-        }
-    }
-
-    return e_valido;
-}
-
-bool valida_nota(char *nota) {
-    bool e_valido = true;
-    bool ponto_flutuante = false;
-    for(int i = 0; i < strlen(nota); i++) {
-
-        if(nota[i] == '\0') {
-            break;
-        }
-
-        if(nota[i] == ',' && !ponto_flutuante) {
-            nota[i] = '.';
-        }
-        
-        if( (nota[i] - '0') < 0 || (nota[i] - '0') > 9) {
-            if(nota[i] == '.') {
-                if(!ponto_flutuante) {
-                    ponto_flutuante = true;
-                }
-                else {
-                    e_valido = false;
-                    break;
-                }
-            }
-            else {
-                e_valido = false;
-                break;
-            }
-        }
-        
-    }
-
-    if(e_valido && atof(nota) && atof(nota) <= 10) {
-        e_valido = true;
-    }
-    else {
-        e_valido = false;
-    }
-
-    return e_valido;
-}
+void pausa_programa();
+void imprime(char *opcao);
+bool valida_matricula(char *matricula, char *operacao, struct aluno *vetor_alunos, int quant_registros);
+bool valida_nota(char *nota);
 
 int main() {
     char opcao[2] = {'f', '\0'};
@@ -364,4 +259,114 @@ int main() {
 
     free(dados_aluno);
     return 0;
+}
+
+void imprime(char *opcao) {
+    if(opcao == "menu") {
+        printf("----------------------\n");
+        printf("|        MENU        |\n");
+        printf("----------------------\n");
+        printf("|1 - Cadastrar Aluno |\n");
+        printf("|2 - Apagar Aluno    |\n");
+        printf("|3 - Listar Alunos   |\n");
+        printf("|4 - Sair            |\n");
+        printf("----------------------\n");
+    }
+    if(opcao == "cadastro") {
+        printf("-------------------------------------------------\n");
+        printf("                CADASTRO DE ALUNO\n");
+        printf("-------------------------------------------------\n");
+    }
+    if(opcao == "apagar") {
+        printf("-------------------------------------------------\n");
+        printf("                  APAGAR ALUNO\n");
+        printf("-------------------------------------------------\n");
+    }   
+    if(opcao == "listar") {
+        printf("-------------------------------------------------\n");
+        printf("                LISTA DE ALUNOS\n");
+        printf("-------------------------------------------------\n");
+    }
+}
+
+void pausa_programa() {
+    printf("\nPressione Enter Para Continuar. . . ");
+    getchar();
+    getchar();
+}
+
+bool valida_matricula(char *matricula, char *operacao, struct aluno *vetor_alunos, int quant_registros) {
+    bool e_valido = true;
+    for(int i = 0; i < strlen(matricula); i++) {
+        if(matricula[i] == '\0') {
+            break;
+        }
+        if( (matricula[i] - '0') < 0 || (matricula[i] - '0') > 9) {
+            e_valido = false;
+        }
+    }
+    
+    if(quant_registros != 0) {
+        for(int i = 0; i < quant_registros; i++) {
+            if(vetor_alunos[i].matricula == atoi(matricula)) {
+                if(operacao == "cadastro") {
+                    e_valido = false;
+                    break;
+                }
+                else if(operacao == "apagar") {
+                    e_valido = true;
+                    break;
+                }
+            }
+            else {
+                if(i == (quant_registros - 1) && operacao == "apagar") {
+                    e_valido = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    return e_valido;
+}
+
+bool valida_nota(char *nota) {
+    bool e_valido = true;
+    bool ponto_flutuante = false;
+    for(int i = 0; i < strlen(nota); i++) {
+
+        if(nota[i] == '\0') {
+            break;
+        }
+
+        if(nota[i] == ',' && !ponto_flutuante) {
+            nota[i] = '.';
+        }
+        
+        if( (nota[i] - '0') < 0 || (nota[i] - '0') > 9) {
+            if(nota[i] == '.') {
+                if(!ponto_flutuante) {
+                    ponto_flutuante = true;
+                }
+                else {
+                    e_valido = false;
+                    break;
+                }
+            }
+            else {
+                e_valido = false;
+                break;
+            }
+        }
+        
+    }
+
+    if(e_valido && atof(nota) && atof(nota) <= 10) {
+        e_valido = true;
+    }
+    else {
+        e_valido = false;
+    }
+
+    return e_valido;
 }
